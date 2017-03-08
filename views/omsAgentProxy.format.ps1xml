@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+  <SelectionSets>
+    <SelectionSet>
+      <Name>default</Name>
+      <Types>
+        <TypeName>omsAgentProxy</TypeName>
+      </Types>
+    </SelectionSet>
+  </SelectionSets>
+  <ViewDefinitions>
+    <View>
+      <Name>default</Name>
+      <ViewSelectedBy>
+        <TypeName>omsAgentProxy</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Width>35</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>50</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>35</Width>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>computerName</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>proxyURL</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>proxyUsername</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>
