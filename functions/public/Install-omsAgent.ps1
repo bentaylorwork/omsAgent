@@ -26,23 +26,29 @@ function Install-OmsAgent
 		[Alias('IPAddress', 'Name')]
 		[string[]]
 		$computerName = $env:COMPUTERNAME,
-		[Parameter(Mandatory=$true, ParameterSetName='workSpaceClearText')]
+		[Parameter(Mandatory=$true, ParameterSetName='localoms-workSpaceClearText')]
+		[Parameter(Mandatory=$true, ParameterSetName='downloadoms-workSpaceClearText')]
 		[ValidateNotNullOrEmpty()]
 		[string]
 		$workspaceid,
-		[Parameter(Mandatory=$true, ParameterSetName='workSpaceClearText')]
+		[Parameter(Mandatory=$true, ParameterSetName='localoms-workSpaceClearText')]
+		[Parameter(Mandatory=$true, ParameterSetName='downloadoms-workSpaceClearText')]
 		[ValidateNotNullOrEmpty()]
 		[string]
 		$workspacekey,
-		[Parameter(Mandatory=$true, ParameterSetName='workSpaceEncrypt')]
+		[Parameter(Mandatory=$true, ParameterSetName='localoms-workSpaceEncrypt')]
+		[Parameter(Mandatory=$true, ParameterSetName='downloadoms-workSpaceEncrypt')]
 		[System.Management.Automation.PSCredential]
 		[System.Management.Automation.Credential()]
 		$workSpace,
 		[Parameter(ParameterSetName='downloadOMS')]
+		[Parameter(Mandatory=$true, ParameterSetName='downloadoms-workSpaceEncrypt')]
 		[ValidateNotNullOrEmpty()]
 		[string]
 		$downloadURL = 'http://download.microsoft.com/download/0/C/0/0C072D6E-F418-4AD4-BCB2-A362624F400A/MMASetup-AMD64.exe',
 		[Parameter(ParameterSetName='localOMS')]
+		[Parameter(Mandatory=$true, ParameterSetName='localoms-workSpaceClearText')]
+		[Parameter(Mandatory=$true, ParameterSetName='localoms-workSpaceEncrypt')]
 		[ValidateScript({Test-Path $_ })]
 		[string]
 		$sourcePath,
@@ -71,6 +77,8 @@ function Install-OmsAgent
 	}
 	Process
 	{
+        $debugparams = $PSBoundParameters
+        Write-Debug -Message "[$(Get-Date -Format G)] - $debugparams - PSBOUNDParams"
 		forEach ($computer in $computerName)
 		{
 			try
@@ -79,7 +87,7 @@ function Install-OmsAgent
 				$psSession = New-PSSession -ComputerName $computer @commonSessionParams
 
 				Write-Verbose "[$(Get-Date -Format G)] - $computer - Checking if OMS is Installed"
-					
+
 				if(-not (Get-omsAgentInternal -computerName $computer -session $psSession))
 				{
 					If ($Pscmdlet.ShouldProcess($computer, 'Install OMS Agent'))
@@ -96,7 +104,7 @@ function Install-OmsAgent
 							$path
 						 }
 
-						if($PSBoundParameters.sourcePath -eq $true)
+						if($PSBoundParameters.sourcePath)
 						{
 							Write-Verbose "[$(Get-Date -Format G)] - $computer - Copying files over powershell session"
 							Copy-Item -Path $sourcePath -Destination (Split-path $path) -ToSession $psSession -Force
