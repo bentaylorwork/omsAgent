@@ -91,7 +91,7 @@ function Install-OmsAgent
 					If ($Pscmdlet.ShouldProcess($computer, 'Install OMS Agent'))
 					{
 						 $path = Invoke-Command -Session $pssession -ScriptBlock {
-							$path = Join-Path $ENV:temp "MMASetup-AMD64.exe"
+							$path = Join-Path $ENV:temp "MMASetup.exe"
 
 							# Check if file exists and if so remove
 							if(Test-Path $path)
@@ -105,7 +105,7 @@ function Install-OmsAgent
 						if($PSBoundParameters.sourcePath) # Check for source path
 						{
 							Write-Verbose "[$(Get-Date -Format G)] - $computer - Copying files over powershell session"
-							Copy-Item -Path $sourcePath -Destination (Split-path $path) -ToSession $psSession -Force
+							Copy-Item -Path $sourcePath -Destination  $path -ToSession $psSession -Force
 						}
 						else
 						{
