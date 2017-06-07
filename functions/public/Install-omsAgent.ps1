@@ -26,29 +26,29 @@ function Install-OmsAgent
 		[Alias('IPAddress', 'Name')]
 		[string[]]
 		$computerName = $env:COMPUTERNAME,
-		[Parameter(Mandatory=$true, ParameterSetName='localoms-workSpaceClearText')]
-		[Parameter(Mandatory=$true, ParameterSetName='downloadoms-workSpaceClearText')]
+		[Parameter(Mandatory=$true, ParameterSetName='localOms-workSpaceClearText')]
+		[Parameter(Mandatory=$true, ParameterSetName='downloadOms-workSpaceClearText')]
 		[ValidateNotNullOrEmpty()]
 		[string]
 		$workspaceid,
-		[Parameter(Mandatory=$true, ParameterSetName='localoms-workSpaceClearText')]
-		[Parameter(Mandatory=$true, ParameterSetName='downloadoms-workSpaceClearText')]
+		[Parameter(Mandatory=$true, ParameterSetName='localOms-workSpaceClearText')]
+		[Parameter(Mandatory=$true, ParameterSetName='downloadOms-workSpaceClearText')]
 		[ValidateNotNullOrEmpty()]
 		[string]
 		$workspacekey,
-		[Parameter(Mandatory=$true, ParameterSetName='localoms-workSpaceEncrypt')]
-		[Parameter(Mandatory=$true, ParameterSetName='downloadoms-workSpaceEncrypt')]
+		[Parameter(Mandatory=$true, ParameterSetName='localOms-workSpaceEncrypt')]
+		[Parameter(Mandatory=$true, ParameterSetName='downloadOms-workSpaceEncrypt')]
 		[System.Management.Automation.PSCredential]
 		[System.Management.Automation.Credential()]
 		$workSpace,
 		[Parameter(ParameterSetName='downloadOMS')]
-		[Parameter(Mandatory=$true, ParameterSetName='downloadoms-workSpaceEncrypt')]
+		[Parameter(Mandatory=$true, ParameterSetName='downloadOms-workSpaceEncrypt')]
 		[ValidateNotNullOrEmpty()]
 		[string]
 		$downloadURL = 'http://download.microsoft.com/download/0/C/0/0C072D6E-F418-4AD4-BCB2-A362624F400A/MMASetup-AMD64.exe',
 		[Parameter(ParameterSetName='localOMS')]
-		[Parameter(Mandatory=$true, ParameterSetName='localoms-workSpaceClearText')]
-		[Parameter(Mandatory=$true, ParameterSetName='localoms-workSpaceEncrypt')]
+		[Parameter(Mandatory=$true, ParameterSetName='localOms-workSpaceClearText')]
+		[Parameter(Mandatory=$true, ParameterSetName='localOms-workSpaceEncrypt')]
 		[ValidateScript({Test-Path $_ })]
 		[string]
 		$sourcePath,
