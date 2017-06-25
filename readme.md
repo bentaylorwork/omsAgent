@@ -14,6 +14,9 @@ A PowerShell module to aide with deployment and management of OMS agents on remo
 * Update-omsAgentWorkSpace
 * Remove-omsAgentProxy
 * Add-omsAgentProxy
+* Install-OmsDependencyAgent
+* Uninstall-omsDependencyAgent
+* Get-omsDependencyAgent
 
 ## Examples
 * Add-omsAgentWorkSpace
@@ -82,6 +85,25 @@ $workSpace = Get-Credential
 Update-omsAgwentWorkSpacekey -computerName 'computer1', 'computer2' -workSpace $workSpace
 ```
 
+* Install-OmsDependencyAgent
+```PowerShell
+Install-OmsDependencyAgent -computerName 'computer1', 'computer2'
+
+Get-OmsAgent -computerName 'computer1', 'computer2' | Install-OmsDependencyAgent
+```
+
+* Get-omsDependencyAgent
+```PowerShell
+Get-omsDependencyAgent -computerName 'computer1', 'computer2'
+```
+
+* Uninstall-omsDependencyAgent
+```PowerShell
+Uninstall-omsDependencyAgent -computerName 'computer1', 'computer2' -Verbose
+
+Get-OmsAgent -computerName 'computer1', 'computer2' | Uninstall-OmsDependencyAgent
+```
+
 ## Installation
 The module is published to the PowerShell Gallery (<https://www.powershellgallery.com/packages/omsAgent>).
 
@@ -90,6 +112,10 @@ Install-Module -Name omsAgent
 ```
 
 ## Versions
+### 1.3
+* Release adding the the following support:
+    * Install-OmsDependencyAgent, Uninstall-omsDependencyAgent, Get-omsDependencyAgent
+
 ### 1.2
 * Release adding the the following support:
     * Added Get-omsAgentProxy, Add-omsAgentProxy, Remove-omsAgentProxy

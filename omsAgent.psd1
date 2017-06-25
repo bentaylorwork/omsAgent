@@ -12,7 +12,7 @@
 RootModule = 'omsAgent.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.2'
+ModuleVersion = '1.3'
 
 # ID used to uniquely identify this module
 GUID = '39daa9a5-8a75-4461-8d95-ccd7717c3c65'
@@ -27,7 +27,7 @@ CompanyName = 'Ben Taylor Work'
 Copyright = '(c) 2016 Ben Taylor. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'A PowerShell module to aide with deployment and management of OMS agents on remote computers..'
+Description = 'A PowerShell module to aide with deployment and management of OMS agents on remote computers.'
 
 # Minimum version of the Windows PowerShell engine required by this module
 # PowerShellVersion = ''
@@ -66,7 +66,7 @@ Description = 'A PowerShell module to aide with deployment and management of OMS
 # NestedModules = @()
 
 # Functions to export from this module
-FunctionsToExport = 'Get-omsAgentWorkSpace', 'Get-omsAgent', 'Add-omsAgentWorkSpace', 'Remove-omsAgentWorkSpace', 'Update-omsAgentWorkSpaceKey', 'Install-omsAgent', 'Uninstall-omsAgent', 'Get-omsAgentProxy', 'Remove-omsAgentProxy', 'Add-omsAgentProxy'
+FunctionsToExport = 'Get-omsAgentWorkSpace', 'Get-omsAgent', 'Add-omsAgentWorkSpace', 'Remove-omsAgentWorkSpace', 'Update-omsAgentWorkSpaceKey', 'Install-omsAgent', 'Uninstall-omsAgent', 'Get-omsAgentProxy', 'Remove-omsAgentProxy', 'Add-omsAgentProxy', 'Install-OmsDependencyAgent', 'Get-omsDependencyAgent', 'Uninstall-omsDependencyAgent'
 
 # Cmdlets to export from this module
 CmdletsToExport = ''
