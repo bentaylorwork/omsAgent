@@ -1,3 +1,9 @@
+if(-not (Get-Module omsAgent))
+{
+	$here = (Split-Path -Parent $MyInvocation.MyCommand.Path).Replace('tests\functions\public', '')
+	Import-Module (Join-Path $here 'omsAgent.psd1') 
+}
+
 InModuleScope -moduleName omsAgent {
     Describe 'Add-omsAgentWorkSpace' {
         BeforeAll {
