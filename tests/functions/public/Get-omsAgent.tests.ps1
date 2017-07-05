@@ -8,12 +8,13 @@ InModuleScope -moduleName omsAgent {
     Describe 'Get-omsAgent' {
         Context 'Logic' {
             it 'Parameters' {
+                Mock Get-omsAgentInternal { $null }
                 {Get-omsAgent -ErrorAction Stop} | Should Not Throw
                 {Get-omsAgent -compName -ErrorAction Stop} | Should Throw
             }
 
             it 'Creates\Removes A PsSession' {
-                Mock New-PSSession { 'sessionData' }
+                Mock New-PSSession { $true }
                 Mock Remove-PSSession {}
                 Mock Get-omsAgentInternal { $null }
 

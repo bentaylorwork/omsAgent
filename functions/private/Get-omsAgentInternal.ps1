@@ -38,7 +38,7 @@ function Get-omsAgentInternal
 
 				New-Object -TypeName PSObject -Property $omsInfo
 			}
-		} -ErrorAction Stop
+		} -ErrorAction Stop -HideComputerName
 	}
 	catch
 	{

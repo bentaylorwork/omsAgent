@@ -41,7 +41,7 @@ function Get-omsAgent
 			try
 			{
 				Write-Verbose "[$(Get-Date -Format G)] - $computer - Creating Remote PS Session"
-				$psSession = New-PSSession -ComputerName $computer @commonSessionParams
+				$psSession = New-PSSession -ComputerName $computer -EnableNetworkAccess @commonSessionParams
 
 				Write-Verbose "[$(Get-Date -Format G)] - $computer - Trying to find Agent Version"
 				Get-omsAgentInternal -computerName $computer -session $psSession

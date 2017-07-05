@@ -26,7 +26,7 @@ function Get-omsAgentProxyInternal
 
 				New-Object -TypeName PSObject -Property $omsProxyInfo
 			}
-		} -ErrorAction Stop
+		} -ErrorAction Stop -HideComputerName
 	}
 	catch
 	{

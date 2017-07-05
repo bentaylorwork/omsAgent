@@ -53,7 +53,7 @@ function Install-OmsDependencyAgent
 			try
 			{
 				Write-Verbose "[$(Get-Date -Format G)] - $computer - Creating Remote PS Session"
-				$psSession = New-PSSession -ComputerName $computer @commonSessionParams
+				$psSession = New-PSSession -ComputerName $computer -EnableNetworkAccess @commonSessionParams
 
 				Write-Verbose "[$(Get-Date -Format G)] - $computer - Checking if OMS is Installed"
 					

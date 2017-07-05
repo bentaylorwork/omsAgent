@@ -1,5 +1,7 @@
 # Microsoft OMS Agent Management (Windows)
 
+![Build Status](https://bentaylorwork.visualstudio.com/_apis/public/build/definitions/7e3fdf3e-09ed-4d7f-a79a-c0e64d1a8b21/12/badge)
+
 ## Overview
 A PowerShell module to aide with deployment and management of OMS agents on remote computers.
 

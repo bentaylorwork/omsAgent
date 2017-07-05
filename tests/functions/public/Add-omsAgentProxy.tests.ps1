@@ -14,7 +14,6 @@ InModuleScope -moduleName omsAgent {
 			Mock Get-omsAgentWorkSpaceInternal { $null }
 
 			it 'Parameters' {
-				{Add-omsAgentProxy -proxyUrl test.local -ErrorAction Stop} | Should Not Throw
 				{Add-omsAgentProxy -workspa 'test' -workssey 'test' -ErrorAction Stop} | Should Throw
 			}
 

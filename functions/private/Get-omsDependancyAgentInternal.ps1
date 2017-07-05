@@ -27,7 +27,7 @@ function Get-omsDependencyAgentInternal
 
 				New-Object -TypeName PSObject -Property $omsInfo
 			}
-		} -ErrorAction Stop
+		} -ErrorAction Stop -HideComputerName
 	}
 	catch
 	{

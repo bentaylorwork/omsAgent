@@ -41,7 +41,7 @@ function Remove-omsAgentProxy
 			try
 			{
 				Write-Verbose "[$(Get-Date -Format G)] - $computer - Creating Remote PS Session"
-				$psSession = New-PSSession -ComputerName $computer @commonSessionParams
+				$psSession = New-PSSession -ComputerName $computer -EnableNetworkAccess @commonSessionParams
 
 				If(Get-omsAgentProxyInternal -computerName $computer -session $psSession)
 				{
