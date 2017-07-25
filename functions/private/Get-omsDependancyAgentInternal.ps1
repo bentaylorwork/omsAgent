@@ -1,4 +1,4 @@
-function Get-omsAgentInternal
+function Get-omsDependencyAgentInternal
 {
 	[CmdletBinding()]
 	[OutputType('omsAgent')]
@@ -13,27 +13,16 @@ function Get-omsAgentInternal
 	try
 	{
 		Invoke-Command -Session $session -ScriptBlock {
-			$oms = Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object { $_.displayName -eq 'Microsoft Monitoring Agent' }
+			$oms = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\DependencyAgent\ -ErrorAction SilentlyContinue | Where-Object { $_.displayName -eq 'Dependency Agent' }
 
 			if($oms)
 			{
 				$omsInfo = @{
-						PSTypeName      = 'omsAgent'
+						PSTypeName      = 'omsDependencyAgent'
 						computerName    = $USING:computerName
 						DisplayName     = $oms.DisplayName
-						Version         = $oms.Version
 						DisplayVersion  = $oms.DisplayVersion
 						UninstallString = $oms.UninstallString
-				}
-				try
-				{
-					New-Object -ComObject 'AgentConfigManager.MgmtSvcCfg' -ErrorAction Stop | Out-Null
-
-					$omsInfo.comObjectAvailable = $true
-				}
-				catch
-				{
-					$omsInfo.comObjectAvailable = $false
 				}
 
 				New-Object -TypeName PSObject -Property $omsInfo

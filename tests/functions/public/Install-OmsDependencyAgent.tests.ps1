@@ -5,20 +5,22 @@ if(-not (Get-Module omsAgent))
 }
 
 InModuleScope -moduleName omsAgent {
-    Describe 'Get-omsAgent' {
+    Describe 'Install-OmsDependencyAgent' {
+        BeforeAll {
+            Mock Invoke-Command {}
+        }
+
         Context 'Logic' {
             it 'Parameters' {
-                Mock Get-omsAgentInternal { $null }
-                {Get-omsAgent -ErrorAction Stop} | Should Not Throw
-                {Get-omsAgent -compName -ErrorAction Stop} | Should Throw
+                {Install-OmsDependencyAgent -workspa 'test' -ErrorAction Stop -WhatIf:$false -Confirm:$false} | Should Throw
             }
 
             it 'Creates\Removes A PsSession' {
-                Mock New-PSSession { $true }
+                Mock New-PSSession { 'sessionData' }
                 Mock Remove-PSSession {}
-                Mock Get-omsAgentInternal { $null }
+                Mock Get-omsAgentInternal { $true }
 
-                Get-omsAgent -ErrorAction SilentlyContinue | Out-Null
+                Install-OmsDependencyAgent -ErrorAction SilentlyContinue -WhatIf:$false -Confirm:$false
 
                 Assert-MockCalled New-PSSession -Exactly 1 -Scope It  
                 Assert-MockCalled Remove-PSSession -Exactly 1 -Scope It  

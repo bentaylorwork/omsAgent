@@ -67,7 +67,7 @@ function Add-omsAgentWorkSpace
 			{
 				Write-Verbose "[$(Get-Date -Format G)] - $computer - Creating Remote PS Session"
 
-				$psSession = New-PSSession -ComputerName $computer @commonSessionParams
+				$psSession = New-PSSession -ComputerName $computer  -EnableNetworkAccess @commonSessionParams
 
 				If(-not(Get-omsAgentWorkSpaceInternal -computerName $computer -session $psSession @omsSessionParams))
 				{

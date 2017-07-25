@@ -1,4 +1,9 @@
 ﻿$here = (Split-Path -Parent $MyInvocation.MyCommand.Path).Replace('tests', '')
+
+if(-not (Get-Module omsAgent)) {
+	Import-Module (Join-Path $here 'omsAgent.psd1') 
+}
+
 $scriptsModules = Get-ChildItem $here -Include *.psd1, *.psm1, *.ps1 -Exclude *.tests.ps1 -Recurse
 
 if(($scriptsModules.count -ne 0) -and (Get-Command Invoke-ScriptAnalyzer -errorAction SilentlyContinue)) {
@@ -6,9 +11,9 @@ if(($scriptsModules.count -ne 0) -and (Get-Command Invoke-ScriptAnalyzer -errorA
 	Describe 'INFO: General - Testing all scripts and modules conform to the Script Analyzer Rules' {
 		forEach ($scriptModule in $scriptsModules) {
 			switch ($scriptModule) { 
-				'*.psm1' { $typeTesting = 'Module' } 
-				'*.ps1'  { $typeTesting = 'Script' } 
-				'*.psd1' { $typeTesting = 'Manifest' } 
+				'*.psm1' { $typeTesting = 'Module' }
+				'*.ps1'  { $typeTesting = 'Script' }
+				'*.psd1' { $typeTesting = 'Manifest' }
 			}
 
 			Context "INFO: Checking $typeTesting – $($module.BaseName) conforms to Script Analyzer Rules" {

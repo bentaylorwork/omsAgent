@@ -30,7 +30,7 @@ function Get-omsAgentWorkSpaceInternal
 			$omsAgent | Add-Member -NotePropertyName 'computerName' -NotePropertyValue $USING:computerName
 
 			$omsAgent
-		} -ErrorAction Stop
+		} -ErrorAction Stop -HideComputerName
 	}
 	catch
 	{

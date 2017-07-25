@@ -1,3 +1,9 @@
+if(-not (Get-Module omsAgent))
+{
+	$here = (Split-Path -Parent $MyInvocation.MyCommand.Path).Replace('tests\functions\public', '')
+	Import-Module (Join-Path $here 'omsAgent.psd1') 
+}
+
 InModuleScope -moduleName omsAgent {
     Describe 'Add-omsAgentWorkSpace' {
         BeforeAll {
@@ -6,6 +12,8 @@ InModuleScope -moduleName omsAgent {
 
         Context 'Logic' {
             it 'Parameters' {
+                Mock Get-omsAgentWorkSpaceInternal { $null }
+
                 {Add-omsAgentWorkSpace -workspaceid 'test' -workspacekey 'test' -ErrorAction Stop} | Should Not Throw
                 {Add-omsAgentWorkSpace -workspa 'test' -workssey 'test' -ErrorAction Stop} | Should Throw
             }

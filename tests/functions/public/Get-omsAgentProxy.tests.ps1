@@ -1,8 +1,13 @@
+if(-not (Get-Module omsAgent))
+{
+	$here = (Split-Path -Parent $MyInvocation.MyCommand.Path).Replace('tests\functions\public', '')
+	Import-Module (Join-Path $here 'omsAgent.psd1') 
+}
+
 InModuleScope -moduleName omsAgent {
 	Describe 'Get-omsAgentProxy' {
 		Context 'Logic' {
 			it 'Parameters' {
-				{Get-omsAgentProxy -ErrorAction Stop} | Should Not Throw
 				{Get-omsAgentProxy -compName -ErrorAction Stop} | Should Throw
 			}
 

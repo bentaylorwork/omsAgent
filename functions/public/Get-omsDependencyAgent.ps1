@@ -1,13 +1,13 @@
-function Get-omsAgent
+function Get-omsDependencyAgent
 {
 	<#
 		.SYNOPSIS 
-			Gets OMS workspace details from remote computers
+			Gets OMS Dependency Agent details from remote computers
 		.EXAMPLE
-			Get-omsAgent -computerName 'computer1', 'computer2'
+			Get-omsDependencyAgent -computerName 'computer1', 'computer2'
 		.NOTES
 			Written by Ben Taylor
-			Version 1.1, 08.02.2016
+			Version 1.0, 22.06.2017
 	#>
 	[CmdletBinding()]
 	[OutputType('omsAgent')]
@@ -44,7 +44,7 @@ function Get-omsAgent
 				$psSession = New-PSSession -ComputerName $computer -EnableNetworkAccess @commonSessionParams
 
 				Write-Verbose "[$(Get-Date -Format G)] - $computer - Trying to find Agent Version"
-				Get-omsAgentInternal -computerName $computer -session $psSession
+				Get-omsDependencyAgentInternal -computerName $computer -session $psSession
 			}
 			catch
 			{

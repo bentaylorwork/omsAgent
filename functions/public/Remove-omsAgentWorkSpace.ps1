@@ -52,7 +52,7 @@ function Remove-omsAgentWorkSpace
 			try
 			{
 				Write-Verbose "[$(Get-Date -Format G)] - $computer - Creating Remote PS Session"
-				$psSession = New-PSSession -ComputerName $computer @commonSessionParams
+				$psSession = New-PSSession -ComputerName $computer -EnableNetworkAccess @commonSessionParams
 
 				If(Get-omsAgentWorkSpaceInternal -computerName $computer -session $psSession @omsSessionParams)
 				{
