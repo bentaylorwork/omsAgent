@@ -66,7 +66,7 @@ Description = 'A PowerShell module to aide with deployment and management of OMS
 # NestedModules = @()
 
 # Functions to export from this module
-FunctionsToExport = 'Get-omsAgentWorkSpace', 'Get-omsAgent', 'Add-omsAgentWorkSpace', 'Remove-omsAgentWorkSpace', 'Update-omsAgentWorkSpaceKey', 'Install-omsAgent', 'Uninstall-omsAgent', 'Get-omsAgentProxy', 'Remove-omsAgentProxy', 'Add-omsAgentProxy', 'Install-OmsDependencyAgent', 'Get-omsDependencyAgent', 'Uninstall-omsDependencyAgent'
+FunctionsToExport = 'Get-omsAgentWorkSpace', 'Get-omsAgent', 'Add-omsAgentWorkSpace', 'Remove-omsAgentWorkSpace', 'Update-omsAgentWorkSpaceKey', 'Install-omsAgent', 'Uninstall-omsAgent', 'Get-omsAgentProxy', 'Remove-omsAgentProxy', 'Add-omsAgentProxy', 'Install-OmsDependencyAgent', 'Get-omsDependencyAgent', 'Uninstall-omsDependencyAgent','Update-omsAgent'
 
 # Cmdlets to export from this module
 CmdletsToExport = ''
