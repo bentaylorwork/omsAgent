@@ -1,22 +1,19 @@
 #Requires -Version 5.0
 
-function Install-OmsAgent
+function Update-OmsAgent
 {
 	<#
 		.Synopsis
-			Installs the OMS agent on remote computers.
+			Update the OMS agent on remote computers.
 		.DESCRIPTION
 			Either downloads the installer from a URL or copies the installer via the powershell session. Can detected if a previous version is installed and skip if so. If allready installed WorkSpaceId and WorkSpaceKey added to previous install. Doesn't detect invalid workspace IDs or Keys.
 		.EXAMPLE
-			Install-OmsAgent -sourcePath 'c:\MMASetup-AMD64.exe' -workspaceID '<workSpaceID>' -workspaceKey '<workSpaceKey>' -Verbose
+			Update-OmsAgent -sourcePath 'c:\MMASetup-AMD64.exe'  -Verbose
 		.EXAMPLE
-			Install-OmsAgent -computerName <computerName> -workspaceID '<workSpaceID>' -workspaceKey '<workSpaceKey>' -Verbose
-		.EXAMPLE
-			$workSpace = Get-Credential
-			Install-OmsAgent -computerName 'computerOne' -workspace $workSpace -verbose
+			Update-OmsAgent -computerName <computerName>  -Verbose
 		.NOTES
-			Written by Ben Taylor
-			Version 1.1, 08.02.2017
+			Written by ben taylor and Monty Harris
+			Version 1.0, 25.07.2017
 	#>
 	[CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = 'Low', DefaultParameterSetName='downloadOMS')]
 	[OutputType([String])]
@@ -26,36 +23,20 @@ function Install-OmsAgent
 		[Alias('IPAddress', 'Name')]
 		[string[]]
 		$computerName = $env:COMPUTERNAME,
-		[Parameter(Mandatory=$true, ParameterSetName='localOms-workSpaceClearText')]
-		[Parameter(Mandatory=$true, ParameterSetName='downloadOms-workSpaceClearText')]
-		[ValidateNotNullOrEmpty()]
-		[string]
-		$workspaceid,
-		[Parameter(Mandatory=$true, ParameterSetName='localOms-workSpaceClearText')]
-		[Parameter(Mandatory=$true, ParameterSetName='downloadOms-workSpaceClearText')]
-		[ValidateNotNullOrEmpty()]
-		[string]
-		$workspacekey,
-		[Parameter(Mandatory=$true, ParameterSetName='localOms-workSpaceEncrypt')]
-		[Parameter(Mandatory=$true, ParameterSetName='downloadOms-workSpaceEncrypt')]
-		[System.Management.Automation.PSCredential]
-		[System.Management.Automation.Credential()]
-		$workSpace,
-		[Parameter(ParameterSetName='downloadOMS')]
-		[Parameter(Mandatory=$true, ParameterSetName='downloadOms-workSpaceEncrypt')]
+
+		[Parameter(Mandatory=$true, ParameterSetName='downloadOms')]
 		[ValidateNotNullOrEmpty()]
 		[string]
 		$downloadURL = 'http://download.microsoft.com/download/0/C/0/0C072D6E-F418-4AD4-BCB2-A362624F400A/MMASetup-AMD64.exe',
+
 		[Parameter(ParameterSetName='localOMS')]
-		[Parameter(Mandatory=$true, ParameterSetName='localOms-workSpaceClearText')]
-		[Parameter(Mandatory=$true, ParameterSetName='localOms-workSpaceEncrypt')]
 		[ValidateScript({Test-Path $_ })]
 		[string]
 		$sourcePath,
-		[Parameter(Mandatory=$false, ParameterSetName='localoms-workSpaceClearText')]
-		[Parameter(Mandatory=$false, ParameterSetName='downloadoms-workSpaceClearText')]
-        [Parameter(Mandatory=$false, ParameterSetName='localoms-workSpaceEncrypt')]
-		[Parameter(Mandatory=$false, ParameterSetName='downloadoms-workSpaceEncrypt')]
+
+		[Parameter(Mandatory = $false)]
+		[Parameter(ParameterSetName='downloadOMS')]
+		[Parameter(ParameterSetName='localOMS')]
 		[System.Management.Automation.PSCredential]
 		[System.Management.Automation.Credential()]
 		$Credential
@@ -71,12 +52,6 @@ function Install-OmsAgent
 		{
 			$commonSessionParams.Credential = $Credential
 		}
-
-		If ($PSBoundParameters['workspace'])
-		{
-			$workspaceid  = (Convert-CredentialToPlainText -credential $workSpace).userName
-			$workspacekey = (Convert-CredentialToPlainText -credential $workSpace).passWord
-		}
 	}
 	Process
 	{
@@ -84,14 +59,16 @@ function Install-OmsAgent
 		{
 			try
 			{
+
 				Write-Verbose "[$(Get-Date -Format G)] - $computer - Creating Remote PS Session"
 				$psSession = New-PSSession -ComputerName $computer -EnableNetworkAccess @commonSessionParams
 
 				Write-Verbose "[$(Get-Date -Format G)] - $computer - Checking if OMS is Installed"
 
-				if(-not (Get-omsAgentInternal -computerName $computer -session $psSession))
+				$orginalAgent = Get-omsAgentInternal -computerName $computer -session $psSession
+				if(($orginalAgent))
 				{
-					If ($Pscmdlet.ShouldProcess($computer, 'Install OMS Agent'))
+					If ($Pscmdlet.ShouldProcess($computer, 'Update OMS Agent'))
 					{
 						 $path = Invoke-Command -Session $pssession -ScriptBlock {
 							$path = Join-Path $ENV:temp "MMASetup.exe"
@@ -112,30 +89,51 @@ function Install-OmsAgent
 						}
 						else
 						{
-							Write-Verbose "[$(Get-Date -Format G)] - $computer - Trying to download installer from URL - $downloadURL"
+							Write-Verbose "[$(Get-Date -Format G)] - $computer - Trying to download new installer from URL - $downloadURL"
 							Invoke-Command -Session $psSession -ScriptBlock {
 								Invoke-WebRequest $USING:downloadURL -OutFile $USING:path -ErrorAction Stop | Out-Null
 							} -ErrorAction Stop
 						}
 
 
-						Write-Verbose "$computer - Trying to install OMS..."
-						$installString = $path + ' /C:"setup.exe /qn ADD_OPINSIGHTS_WORKSPACE=1 ' +  "OPINSIGHTS_WORKSPACE_ID=$workspaceID " + "OPINSIGHTS_WORKSPACE_KEY=$workSpaceKey " +'AcceptEndUserLicenseAgreement=1"'
+						Write-Verbose "$computer - Trying to Update OMS..."
+						$installString = $path + ' /Q:A /R:N /C:"setup.exe /qn AcceptEndUserLicenseAgreement=1"'
 
 						$installSuccess = Invoke-Command -Session $psSession -ScriptBlock {
+							Get-service HealthService|Stop-Service
 							cmd.exe /C $USING:installString
 							$LASTEXITCODE
 						} -ErrorAction Stop
 
-						if($installSuccess -ne 0)
+						Write-Verbose "[$(Get-Date -Format G)] - $computer - $installSuccess"
+
+						if($installSuccess -eq 3010)
 						{
-							Write-Error "$computer - OMS didn't install correctly based on the exit code"
+							Write-Verbose "$computer - OMS updated correctly based on the exit code"
+							Write-Verbose "$computer - Restarting HealthService"
+							Invoke-Command -Session $psSession -ScriptBlock {
+										Get-service HealthService|Start-Service
+												} -ErrorAction Stop
+
+						}
+						Elseif($installSuccess -ne 0)
+						{
+							Invoke-Command -Session $psSession -ScriptBlock {
+										Get-service HealthService|Start-Service
+												} -ErrorAction Stop
+							Write-Verbose "$computer - Restarting HealthService"
+							Write-Error "$computer - OMS didn't update correctly based on the exit code"
+
+
 						}
 						else
 						{
-							if(Get-omsAgentInternal -computerName $computer -session $psSession)
+							if((Get-omsAgentInternal -computerName $computer -session $psSession).displayverison -gt $orginalAgent.displayverison)
 							{
-								Write-Verbose "[$(Get-Date -Format G)] - $computer - OMS installed correctly"
+								Write-Verbose "[$(Get-Date -Format G)] - $computer - OMS Updated correctly"
+								Invoke-Command -Session $psSession -ScriptBlock {
+										Get-service HealthService|Start-Service
+												} -ErrorAction Stop
 							}
 							else
 							{
@@ -146,7 +144,7 @@ function Install-OmsAgent
 				}
 				else
 				{
-					Write-Verbose "[$(Get-Date -Format G)] - $computer - OMS Agent allready installed so skipping."
+					Write-Error "[$(Get-Date -Format G)] - $computer - OMS Agent not installed so skipping."
 				}
 			}
 			catch
