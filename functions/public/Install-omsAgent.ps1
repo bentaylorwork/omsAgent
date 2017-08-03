@@ -52,7 +52,10 @@ function Install-OmsAgent
 		[ValidateScript({Test-Path $_ })]
 		[string]
 		$sourcePath,
-		[Parameter()]
+		[Parameter(Mandatory=$false, ParameterSetName='localoms-workSpaceClearText')]
+		[Parameter(Mandatory=$false, ParameterSetName='downloadoms-workSpaceClearText')]
+        [Parameter(Mandatory=$false, ParameterSetName='localoms-workSpaceEncrypt')]
+		[Parameter(Mandatory=$false, ParameterSetName='downloadoms-workSpaceEncrypt')]
 		[System.Management.Automation.PSCredential]
 		[System.Management.Automation.Credential()]
 		$Credential
